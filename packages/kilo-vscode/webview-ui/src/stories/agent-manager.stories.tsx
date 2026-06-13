@@ -6,9 +6,9 @@
 
 import type { Meta, StoryObj } from "storybook-solidjs-vite"
 import { StoryProviders } from "./StoryProviders"
-import { FileTree } from "../../agent-manager/FileTree"
+import { FileTree } from "../../diff-viewer/FileTree"
 import { DiffPanel } from "../../agent-manager/DiffPanel"
-import { FullScreenDiffView } from "../../agent-manager/FullScreenDiffView"
+import { FullScreenDiffView } from "../../diff-viewer/FullScreenDiffView"
 import { WorktreeItem } from "../../agent-manager/WorktreeItem"
 import { Button } from "@kilocode/kilo-ui/button"
 import { IconButton } from "@kilocode/kilo-ui/icon-button"
@@ -17,6 +17,7 @@ import { TooltipKeybind } from "@kilocode/kilo-ui/tooltip"
 import { ContextMenu } from "@kilocode/kilo-ui/context-menu"
 import { createSignal, type JSX } from "solid-js"
 import type { WorktreeFileDiff, WorktreeState, WorktreeGitStats, PRStatus } from "../types/messages"
+import type { ReviewComment } from "../../diff-viewer/review-comments"
 import "../../agent-manager/agent-manager.css"
 import "../../agent-manager/agent-manager-review.css"
 
@@ -283,6 +284,7 @@ export const FullScreenDiffAgentEditScroll: Story = {
     const [diffs, setDiffs] = createSignal([edited("before"), tail])
     const [version, setVersion] = createSignal("before")
     const [key, setKey] = createSignal("agent-edit-scroll")
+    const [comments, setComments] = createSignal<ReviewComment[]>([])
     const update = () => {
       setDiffs([edited("after"), tail])
       setVersion("after")
@@ -311,8 +313,8 @@ export const FullScreenDiffAgentEditScroll: Story = {
               sessionKey={key()}
               diffStyle="unified"
               onDiffStyleChange={() => {}}
-              comments={[]}
-              onCommentsChange={() => {}}
+              comments={comments()}
+              onCommentsChange={setComments}
               onClose={() => {}}
             />
           </div>
